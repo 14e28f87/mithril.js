@@ -139,7 +139,7 @@ module.exports = function($window) {
 	function initComponent(vnode, hooks) {
 		var sentinel
 		if (typeof vnode.tag.view === "function") {
-			vnode.state = Object.create(vnode.tag)
+			vnode.state = vnode.tag
 			sentinel = vnode.state.view
 			if (sentinel.$$reentrantLock$$ != null) return
 			sentinel.$$reentrantLock$$ = true
