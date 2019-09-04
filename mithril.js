@@ -411,7 +411,7 @@ var _12 = function($window) {
 	function initComponent(vnode3, hooks) {
 		var sentinel
 		if (typeof vnode3.tag.view === "function") {
-			vnode3.state = Object.create(vnode3.tag)
+			vnode3.state = vnode3.tag
 			sentinel = vnode3.state.view
 			if (sentinel.$$reentrantLock$$ != null) return
 			sentinel.$$reentrantLock$$ = true
