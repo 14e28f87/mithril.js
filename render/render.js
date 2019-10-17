@@ -2,6 +2,14 @@
 
 var Vnode = require("../render/vnode")
 
+function assignIn(object, source){
+	if(object && source){
+		for(let [k, v] of Object.entries(source) ){
+			object[k] = v;
+		}
+	}
+}
+
 module.exports = function($window) {
 	var $doc = $window && $window.document
 	var currentRedraw
@@ -55,6 +63,7 @@ module.exports = function($window) {
 		var tag = vnode.tag
 		if (typeof tag === "string") {
 			vnode.state = {}
+			assignIn(vnode.state, vnode.attrs);
 			if (vnode.attrs != null) initLifecycle(vnode.attrs, vnode, hooks)
 			switch (tag) {
 				case "#": createText(parent, vnode, nextSibling); break
@@ -405,6 +414,7 @@ module.exports = function($window) {
 			vnode.state = old.state
 			vnode.events = old.events
 			if (shouldNotUpdate(vnode, old)) return
+			assignIn(vnode.state, vnode.attrs);
 			if (typeof oldTag === "string") {
 				if (vnode.attrs != null) {
 					updateLifecycle(vnode.attrs, vnode, hooks)

@@ -284,6 +284,13 @@ if (typeof window !== "undefined") {
 	var PromisePolyfill = global.Promise
 } else {
 }
+function assignIn(object, source){
+	if(object && source){
+		for(let [k, v] of Object.entries(source) ){
+			object[k] = v;
+		}
+	}
+}
 var _12 = function($window) {
 	var $doc = $window && $window.document
 	var currentRedraw
@@ -332,6 +339,7 @@ var _12 = function($window) {
 		var tag = vnode3.tag
 		if (typeof tag === "string") {
 			vnode3.state = {}
+			assignIn(vnode3.state, vnode3.attrs);
 			if (vnode3.attrs != null) initLifecycle(vnode3.attrs, vnode3, hooks)
 			switch (tag) {
 				case "#": createText(parent, vnode3, nextSibling); break
@@ -670,6 +678,7 @@ var _12 = function($window) {
 			vnode3.state = old.state
 			vnode3.events = old.events
 			if (shouldNotUpdate(vnode3, old)) return
+			assignIn(vnode3.state, vnode3.attrs);
 			if (typeof oldTag === "string") {
 				if (vnode3.attrs != null) {
 					updateLifecycle(vnode3.attrs, vnode3, hooks)
