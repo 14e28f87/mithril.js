@@ -337,9 +337,9 @@ var _12 = function($window) {
 	}
 	function createNode(parent, vnode3, hooks, ns, nextSibling) {
 		var tag = vnode3.tag
+		assignIn(vnode3.state, vnode3.attrs);
 		if (typeof tag === "string") {
 			vnode3.state = {}
-			assignIn(vnode3.state, vnode3.attrs);
 			if (vnode3.attrs != null) initLifecycle(vnode3.attrs, vnode3, hooks)
 			switch (tag) {
 				case "#": createText(parent, vnode3, nextSibling); break
