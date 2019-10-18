@@ -337,7 +337,6 @@ var _12 = function($window) {
 	}
 	function createNode(parent, vnode3, hooks, ns, nextSibling) {
 		var tag = vnode3.tag
-		assignIn(vnode3.state, vnode3.attrs);
 		if (typeof tag === "string") {
 			vnode3.state = {}
 			if (vnode3.attrs != null) initLifecycle(vnode3.attrs, vnode3, hooks)
@@ -678,7 +677,6 @@ var _12 = function($window) {
 			vnode3.state = old.state
 			vnode3.events = old.events
 			if (shouldNotUpdate(vnode3, old)) return
-			assignIn(vnode3.state, vnode3.attrs);
 			if (typeof oldTag === "string") {
 				if (vnode3.attrs != null) {
 					updateLifecycle(vnode3.attrs, vnode3, hooks)
@@ -1175,10 +1173,12 @@ var _12 = function($window) {
 	}
 	//lifecycle
 	function initLifecycle(source, vnode3, hooks) {
+		assignIn(vnode3.state, vnode3.attrs);
 		if (typeof source.oninit === "function") callHook.call(source.oninit, vnode3)
 		if (typeof source.oncreate === "function") hooks.push(callHook.bind(source.oncreate, vnode3))
 	}
 	function updateLifecycle(source, vnode3, hooks) {
+		assignIn(vnode3.state, vnode3.attrs);
 		if (typeof source.onupdate === "function") hooks.push(callHook.bind(source.onupdate, vnode3))
 	}
 	function shouldNotUpdate(vnode3, old) {

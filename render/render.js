@@ -61,7 +61,6 @@ module.exports = function($window) {
 	}
 	function createNode(parent, vnode, hooks, ns, nextSibling) {
 		var tag = vnode.tag
-		assignIn(vnode.state, vnode.attrs);
 		if (typeof tag === "string") {
 			vnode.state = {}
 			if (vnode.attrs != null) initLifecycle(vnode.attrs, vnode, hooks)
@@ -414,7 +413,6 @@ module.exports = function($window) {
 			vnode.state = old.state
 			vnode.events = old.events
 			if (shouldNotUpdate(vnode, old)) return
-			assignIn(vnode.state, vnode.attrs);
 			if (typeof oldTag === "string") {
 				if (vnode.attrs != null) {
 					updateLifecycle(vnode.attrs, vnode, hooks)
@@ -924,10 +922,12 @@ module.exports = function($window) {
 
 	//lifecycle
 	function initLifecycle(source, vnode, hooks) {
+		assignIn(vnode.state, vnode.attrs);
 		if (typeof source.oninit === "function") callHook.call(source.oninit, vnode)
 		if (typeof source.oncreate === "function") hooks.push(callHook.bind(source.oncreate, vnode))
 	}
 	function updateLifecycle(source, vnode, hooks) {
+		assignIn(vnode.state, vnode.attrs);
 		if (typeof source.onupdate === "function") hooks.push(callHook.bind(source.onupdate, vnode))
 	}
 	function shouldNotUpdate(vnode, old) {
