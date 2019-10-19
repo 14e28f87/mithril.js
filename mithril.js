@@ -1174,11 +1174,13 @@ var _12 = function($window) {
 	//lifecycle
 	function initLifecycle(source, vnode3, hooks) {
 		assignIn(vnode3.state, vnode3.attrs);
+		vnode3.state.children = vnode3.children;
 		if (typeof source.oninit === "function") callHook.call(source.oninit, vnode3)
 		if (typeof source.oncreate === "function") hooks.push(callHook.bind(source.oncreate, vnode3))
 	}
 	function updateLifecycle(source, vnode3, hooks) {
 		assignIn(vnode3.state, vnode3.attrs);
+		vnode3.state.children = vnode3.children;
 		if (typeof source.onupdate === "function") hooks.push(callHook.bind(source.onupdate, vnode3))
 	}
 	function shouldNotUpdate(vnode3, old) {

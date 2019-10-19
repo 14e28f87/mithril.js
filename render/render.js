@@ -923,11 +923,13 @@ module.exports = function($window) {
 	//lifecycle
 	function initLifecycle(source, vnode, hooks) {
 		assignIn(vnode.state, vnode.attrs);
+		vnode.state.children = vnode.children;
 		if (typeof source.oninit === "function") callHook.call(source.oninit, vnode)
 		if (typeof source.oncreate === "function") hooks.push(callHook.bind(source.oncreate, vnode))
 	}
 	function updateLifecycle(source, vnode, hooks) {
 		assignIn(vnode.state, vnode.attrs);
+		vnode.state.children = vnode.children;
 		if (typeof source.onupdate === "function") hooks.push(callHook.bind(source.onupdate, vnode))
 	}
 	function shouldNotUpdate(vnode, old) {
