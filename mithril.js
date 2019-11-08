@@ -284,10 +284,12 @@ if (typeof window !== "undefined") {
 	var PromisePolyfill = global.Promise
 } else {
 }
-function assignIn(object, source){
+function extend(object, source){
 	if(object && source){
 		for(let [k, v] of Object.entries(source) ){
-			object[k] = v;
+			if( k in object ){
+				object[k] = v;
+			}
 		}
 	}
 }
@@ -431,8 +433,8 @@ var _12 = function($window) {
 		}
 		initLifecycle(vnode3.state, vnode3, hooks)
 		if (vnode3.attrs != null) initLifecycle(vnode3.attrs, vnode3, hooks)
-		assignIn(vnode3.state, vnode3.attrs);
-		vnode3.state.children = vnode3.children;
+		extend(vnode3.state, { children : vnode3.children } );
+		extend(vnode3.state, vnode3.attrs);
 		vnode3.instance = Vnode.normalize(callHook.call(vnode3.state.view, vnode3))
 		if (vnode3.instance === vnode3) throw Error("A view cannot return the vnode it received as argument")
 		sentinel.$$reentrantLock$$ = null
@@ -752,8 +754,8 @@ var _12 = function($window) {
 		}
 	}
 	function updateComponent(parent, old, vnode3, hooks, nextSibling, ns) {
-		assignIn(vnode3.state, vnode3.attrs);
-		vnode3.state.children = vnode3.children;
+		extend(vnode3.state, { children : vnode3.children } );
+		extend(vnode3.state, vnode3.attrs);
 		vnode3.instance = Vnode.normalize(callHook.call(vnode3.state.view, vnode3))
 		if (vnode3.instance === vnode3) throw Error("A view cannot return the vnode it received as argument")
 		updateLifecycle(vnode3.state, vnode3, hooks)
@@ -1177,14 +1179,14 @@ var _12 = function($window) {
 	}
 	//lifecycle
 	function initLifecycle(source, vnode3, hooks) {
-		assignIn(vnode3.state, vnode3.attrs);
-		vnode3.state.children = vnode3.children;
+		extend(vnode3.state, { children : vnode3.children } );
+		extend(vnode3.state, vnode3.attrs);
 		if (typeof source.oninit === "function") callHook.call(source.oninit, vnode3)
 		if (typeof source.oncreate === "function") hooks.push(callHook.bind(source.oncreate, vnode3))
 	}
 	function updateLifecycle(source, vnode3, hooks) {
-		assignIn(vnode3.state, vnode3.attrs);
-		vnode3.state.children = vnode3.children;
+		extend(vnode3.state, { children : vnode3.children } );
+		extend(vnode3.state, vnode3.attrs);
 		if (typeof source.onupdate === "function") hooks.push(callHook.bind(source.onupdate, vnode3))
 	}
 	function shouldNotUpdate(vnode3, old) {
