@@ -431,6 +431,8 @@ var _12 = function($window) {
 		}
 		initLifecycle(vnode3.state, vnode3, hooks)
 		if (vnode3.attrs != null) initLifecycle(vnode3.attrs, vnode3, hooks)
+		assignIn(vnode3.state, vnode3.attrs);
+		vnode3.state.children = vnode3.children;
 		vnode3.instance = Vnode.normalize(callHook.call(vnode3.state.view, vnode3))
 		if (vnode3.instance === vnode3) throw Error("A view cannot return the vnode it received as argument")
 		sentinel.$$reentrantLock$$ = null
@@ -750,6 +752,8 @@ var _12 = function($window) {
 		}
 	}
 	function updateComponent(parent, old, vnode3, hooks, nextSibling, ns) {
+		assignIn(vnode3.state, vnode3.attrs);
+		vnode3.state.children = vnode3.children;
 		vnode3.instance = Vnode.normalize(callHook.call(vnode3.state.view, vnode3))
 		if (vnode3.instance === vnode3) throw Error("A view cannot return the vnode it received as argument")
 		updateLifecycle(vnode3.state, vnode3, hooks)
