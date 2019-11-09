@@ -5,7 +5,7 @@ var Vnode = require("../render/vnode")
 function extend(object, source){
 	if(object && source){
 		for(let [k, v] of Object.entries(source) ){
-			if( typeof(object[k]) != undefined ){
+			if( typeof(object[k]) != "undefined" ){
 				object[k] = v;
 			}
 		}
