@@ -2,16 +2,6 @@
 
 var Vnode = require("../render/vnode")
 
-function extend(object, source){
-	if(object && source){
-		for(let [k, v] of Object.entries(source) ){
-			if( typeof(object[k]) != "undefined" ){
-				object[k] = v;
-			}
-		}
-	}
-}
-
 module.exports = function($window) {
 	var $doc = $window && $window.document
 	var currentRedraw
@@ -162,8 +152,8 @@ module.exports = function($window) {
 		}
 		initLifecycle(vnode.state, vnode, hooks)
 		if (vnode.attrs != null) initLifecycle(vnode.attrs, vnode, hooks)
-		extend(vnode.state, { children : vnode.children } );
-		extend(vnode.state, vnode.attrs);
+		assignState(vnode.state, { children : vnode.children } );
+		assignState(vnode.state, vnode.attrs);
 		vnode.instance = Vnode.normalize(callHook.call(vnode.state.view, vnode))
 		if (vnode.instance === vnode) throw Error("A view cannot return the vnode it received as argument")
 		sentinel.$$reentrantLock$$ = null
@@ -491,8 +481,8 @@ module.exports = function($window) {
 		}
 	}
 	function updateComponent(parent, old, vnode, hooks, nextSibling, ns) {
-		extend(vnode.state, { children : vnode.children } );
-		extend(vnode.state, vnode.attrs);
+		assignState(vnode.state, { children : vnode.children } );
+		assignState(vnode.state, vnode.attrs);
 		vnode.instance = Vnode.normalize(callHook.call(vnode.state.view, vnode))
 		if (vnode.instance === vnode) throw Error("A view cannot return the vnode it received as argument")
 		updateLifecycle(vnode.state, vnode, hooks)
@@ -928,14 +918,14 @@ module.exports = function($window) {
 
 	//lifecycle
 	function initLifecycle(source, vnode, hooks) {
-		extend(vnode.state, { children : vnode.children } );
-		extend(vnode.state, vnode.attrs);
+		assignState(vnode.state, { children : vnode.children } );
+		assignState(vnode.state, vnode.attrs);
 		if (typeof source.oninit === "function") callHook.call(source.oninit, vnode)
 		if (typeof source.oncreate === "function") hooks.push(callHook.bind(source.oncreate, vnode))
 	}
 	function updateLifecycle(source, vnode, hooks) {
-		extend(vnode.state, { children : vnode.children } );
-		extend(vnode.state, vnode.attrs);
+		assignState(vnode.state, { children : vnode.children } );
+		assignState(vnode.state, vnode.attrs);
 		if (typeof source.onupdate === "function") hooks.push(callHook.bind(source.onupdate, vnode))
 	}
 	function shouldNotUpdate(vnode, old) {
@@ -964,6 +954,16 @@ module.exports = function($window) {
 		vnode.children = old.children
 		vnode.text = old.text
 		return true
+	}
+
+	function assignState(object, source){
+		if(object && source){
+			for(let [k, v] of Object.entries(source) ){
+				if(! isLifecycleMethod(k) ){
+					object[k] = v;
+				}
+			}
+		}
 	}
 
 	return function(dom, vnodes, redraw) {
